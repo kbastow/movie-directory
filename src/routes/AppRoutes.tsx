@@ -1,9 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import HomePage from "../Pages/HomePage";
-import FavouritesPage from "../Pages/FavouritesPage";
-import MoviePage from "../Pages/MoviePage";
+import HomePage from "../pages/HomePage";
+import FavouritesPage from "../pages/FavouritesPage";
+import MoviePage from "../pages/MoviePage";
 import AppLayout from "../layout/AppLayout";
+import PageNotFound from "../pages/PageNotFound";
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -11,6 +12,7 @@ const AppRoutes: React.FC = () => (
       <Route index element={<HomePage />} />
       <Route path="favourites" element={<FavouritesPage />} />
       <Route path="movie/:id" element={<MoviePage />} />
+      <Route path="*" element={<PageNotFound />}></Route>
     </Route>
   </Routes>
 );
