@@ -1,20 +1,14 @@
-import "./App.css";
 import React from "react";
-import { ThemeProvider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import theme from "./styles/theme";
-import AppRoutes from "./routes/routes";
-import Navigation from "./components/Navigation";
-import { Container } from "@mui/material";
+import AppRoutes from "./routes/AppRoutes";
+
+import { BrowserRouter } from "react-router";
 
 const App: React.FC = () => (
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <Navigation />
-    <Container>
+  <>
+    <BrowserRouter>
       <AppRoutes />
-    </Container>
-  </ThemeProvider>
+    </BrowserRouter>
+  </>
 );
 
 export default App;
