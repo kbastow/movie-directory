@@ -1,41 +1,53 @@
 import React from "react";
 import MovieCard from "../components/MovieCard";
-import { Box } from "@mui/material";
-
-const mockMovies = [
-  {
-    id: 1,
-    title: "Dune",
-    poster_path: "https://placehold.co/150x400?text=Dune",
-  },
-  {
-    id: 2,
-    title: "Godzilla",
-    poster_path: "https://placehold.co/150x400?text=Godzilla",
-  },
-  {
-    id: 3,
-    title: "Barbie",
-    poster_path: "https://placehold.co/150x400?text=Barbie",
-  },
-];
+import { Box, Stack } from "@mui/material";
+import { useTrendingMovies } from "../hooks/useTrendingMovies";
+import { type Movie } from "../types/movies";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const HomePage: React.FC = () => {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        gap: 2,
-        flexWrap: "wrap",
-        justifyContent: "left",
-        py: 6,
-      }}
-    >
-      {mockMovies.map((movie) => (
+  const { data, isLoading, isError } = useTrendingMovies();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading movies</div>;
+
+  return isMobile ? (
+    <Stack spacing={2} sx={{ py: 2 }}>
+      {data.results.map((movie: Movie) => (
         <MovieCard
           key={movie.id}
           title={movie.title}
-          poster={movie.poster_path}
+          poster={
+            movie.poster_path
+              ? `https://image.tmdb.org/t/p/w154${movie.poster_path}`
+              : "https://placehold.co/154x400?text=No+image"
+          }
+        />
+      ))}
+    </Stack>
+  ) : (
+    <Box
+      sx={{
+        display: "flex",
+        overflowX: "auto",
+        gap: 3,
+        py: 6,
+        px: 2,
+        scrollSnapType: "x mandatory",
+      }}
+    >
+      {data.results.map((movie: Movie) => (
+        <MovieCard
+          key={movie.id}
+          title={movie.title}
+          poster={
+            movie.poster_path
+              ? `https://image.tmdb.org/t/p/w154${movie.poster_path}`
+              : "https://placehold.co/154x400?text=No+image"
+          }
         />
       ))}
     </Box>
