@@ -6,7 +6,7 @@ const AppLayout: React.FC = () => {
   return (
     <>
       <Header />
-      <Container>
+      <Container sx={{ mt: 8 }}>
         <Outlet />
       </Container>
     </>
