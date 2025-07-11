@@ -29,8 +29,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
       <Card
         sx={{
           display: isMobile ? "flex" : "block",
-          width: isMobile ? "100%" : 200,
-          height: isMobile ? 150 : "auto",
+          width: isMobile ? "100%" : 150,
+          height: isMobile ? 100 : "auto",
         }}
       >
         <CardMedia
@@ -38,8 +38,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
           image={poster}
           alt={title}
           sx={{
-            width: isMobile ? 100 : "100%",
-            height: isMobile ? "100%" : 300,
+            width: isMobile ? 70 : "100%",
+            height: isMobile ? "100%" : 225,
             objectFit: "cover",
           }}
         />
@@ -49,11 +49,11 @@ const MovieCard: React.FC<MovieCardProps> = ({
             flexDirection: "column",
             alignItems: "left",
             justifyContent: "center",
-            gap: 1,
-            flexGrow: 1,
+            gap: 0.5,
+            pt: 3,
           }}
         >
-          <Typography variant="body1" noWrap={!isMobile}>
+          <Typography variant="body2" noWrap={!isMobile}>
             {title}
           </Typography>
           <Typography variant="subtitle2" noWrap={!isMobile}>
