@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
         queryFn: () => fetchTrendingMovies(page + 1),
       });
     }
-  }, [page, isMobile, data, queryClient]);
+  }, [page, data, queryClient]);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading movies</div>;
