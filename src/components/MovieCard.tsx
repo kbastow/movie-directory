@@ -11,9 +11,16 @@ import {
 interface MovieCardProps {
   title: string;
   poster: string;
+  release_date: string;
+  vote_average: number;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ title, poster }) => {
+const MovieCard: React.FC<MovieCardProps> = ({
+  title,
+  poster,
+  release_date,
+  vote_average,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -31,8 +38,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ title, poster }) => {
           image={poster}
           alt={title}
           sx={{
-            minWidth: isMobile ? 100 : "100%",
-            maxWidth: isMobile ? 100 : "100%",
+            width: isMobile ? 100 : "100%",
             height: isMobile ? "100%" : 300,
             objectFit: "cover",
           }}
@@ -40,13 +46,21 @@ const MovieCard: React.FC<MovieCardProps> = ({ title, poster }) => {
         <CardContent
           sx={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "left",
+            flexDirection: "column",
+            alignItems: "left",
+            justifyContent: "center",
+            gap: 1,
             flexGrow: 1,
           }}
         >
-          <Typography variant="subtitle1" noWrap={!isMobile}>
+          <Typography variant="body1" noWrap={!isMobile}>
             {title}
+          </Typography>
+          <Typography variant="subtitle2" noWrap={!isMobile}>
+            {release_date.slice(0, 4)}
+          </Typography>
+          <Typography variant="caption" noWrap={!isMobile}>
+            Rating: {Math.round(vote_average)} / 10
           </Typography>
         </CardContent>
       </Card>

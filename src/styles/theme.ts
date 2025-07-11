@@ -62,6 +62,8 @@ const theme = createTheme({
         },
         containedPrimary: {
           color: "#fff",
+          backgroundColor: "transparent",
+          border: "solid 1px #fff",
         },
       },
     },

@@ -21,8 +21,8 @@ const ScrollWrapper = styled(Box)(({ theme }) => ({
 const ScrollContent = styled(Box)(({ theme }) => ({
   display: "flex",
   overflowX: "auto",
-  gap: theme.spacing(3),
-  padding: `${theme.spacing(6)} ${theme.spacing(4)}`,
+  gap: theme.spacing(2),
+  padding: `${theme.spacing(4)} ${theme.spacing(2)}`,
   scrollSnapType: "x mandatory",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
@@ -41,15 +41,18 @@ const ArrowButton = styled(IconButton)(({ theme }) => ({
 
 const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
   children,
-  scrollAmount = 300,
 }) => {
+  const cardRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const delta = direction === "left" ? -scrollAmount : scrollAmount;
+    if (!scrollRef.current || !cardRef.current) return;
+    const cardWidth = cardRef.current.offsetWidth;
+    const gapPx = parseInt(theme.spacing(2).replace("px", ""), 10);
+    const amount = cardWidth + gapPx;
+    const delta = direction === "left" ? -amount : amount;
     scrollRef.current.scrollBy({ left: delta, behavior: "smooth" });
   };
 
@@ -61,7 +64,17 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         </ArrowButton>
       )}
 
-      <ScrollContent ref={scrollRef}>{children}</ScrollContent>
+      <ScrollContent ref={scrollRef}>
+        {React.Children.map(children, (child, index) =>
+          index === 0 ? (
+            <div ref={cardRef} style={{ scrollSnapAlign: "start" }}>
+              {child}
+            </div>
+          ) : (
+            <div style={{ scrollSnapAlign: "start" }}>{child}</div>
+          )
+        )}
+      </ScrollContent>
 
       {!isMobile && (
         <ArrowButton onClick={() => scroll("right")} sx={{ right: 0 }}>
