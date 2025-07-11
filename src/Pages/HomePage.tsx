@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
-import { Stack, Button, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useTrendingMovies } from "../hooks/useTrendingMovies";
 import { type Movie } from "../types/movies";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -8,6 +8,7 @@ import HorizontalScroller from "../components/HorizontalScroller";
 import MovieSection from "../components/MovieSection";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchTrendingMovies } from "../api/movies";
+import MobilePaginationControls from "../components/MobilePaginationControls";
 
 const HomePage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -31,6 +32,17 @@ const HomePage: React.FC = () => {
       });
     }
   }, [page, data, queryClient]);
+
+  useEffect(() => {
+    if (isMobile) {
+      setMobileSlicePage(() => {
+        const totalSlices = Math.ceil(
+          (data?.results.length || 0) / itemsPerPage
+        );
+        return totalSlices;
+      });
+    }
+  }, [page, isMobile, data?.results.length]);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading movies</div>;
@@ -74,41 +86,15 @@ const HomePage: React.FC = () => {
                 />
               ))}
             </Stack>
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              sx={{ py: 2 }}
-            >
-              <Button
-                variant="contained"
-                onClick={() => setMobileSlicePage((prev) => prev - 1)}
-                disabled={page === 1}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const totalPagesForThisAPIPage = Math.ceil(
-                    data.results.length / itemsPerPage
-                  );
-                  if (mobileSlicePage < totalPagesForThisAPIPage) {
-                    setMobileSlicePage((prev) => prev + 1);
-                  } else if (page < data.total_pages) {
-                    setPage((prev) => prev + 1);
-                    setMobileSlicePage(1);
-                  }
-                }}
-                disabled={
-                  page === data.total_pages &&
-                  mobileSlicePage >=
-                    Math.ceil(data.results.length / itemsPerPage)
-                }
-              >
-                Next
-              </Button>
-            </Stack>
+            <MobilePaginationControls
+              page={page}
+              setPage={setPage}
+              slicePage={mobileSlicePage}
+              setSlicePage={setMobileSlicePage}
+              itemsPerPage={itemsPerPage}
+              resultsLength={data.results.length}
+              totalPages={data.total_pages}
+            ></MobilePaginationControls>
           </>
         )}
       </MovieSection>
