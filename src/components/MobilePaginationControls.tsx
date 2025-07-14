@@ -36,6 +36,7 @@ const MobilePaginationControls: React.FC<MobilePaginationControlsProps> = ({
       setSlicePage((prev) => prev - 1);
     } else if (page > 1) {
       setPage((prev) => prev - 1);
+      setSlicePage(Math.ceil(resultsLength / itemsPerPage));
     }
   };
 
