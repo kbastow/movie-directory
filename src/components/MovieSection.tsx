@@ -59,6 +59,9 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
     data: infiniteData,
     isLoading: isDesktopLoading,
     isError: isDesktopError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useInfiniteMovies(type);
 
   if ((isMobile && isMobileLoading) || (!isMobile && isDesktopLoading)) {
@@ -108,7 +111,11 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
           )}
         </>
       ) : (
-        <HorizontalScroller>
+        <HorizontalScroller
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        >
           {infiniteData?.pages.flatMap((group) =>
             group.results.map((movie: Movie) => (
               <MovieCard

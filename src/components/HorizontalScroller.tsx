@@ -6,11 +6,13 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 type HorizontalScrollerProps = {
   children: React.ReactNode;
-  scrollAmount?: number;
+  hasNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isFetchingNextPage?: boolean;
 };
 
 const ScrollWrapper = styled(Box)(({ theme }) => ({
@@ -41,9 +43,12 @@ const ArrowButton = styled(IconButton)(({ theme }) => ({
 
 const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
   children,
+  hasNextPage,
+  fetchNextPage,
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -56,6 +61,32 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     scrollRef.current.scrollBy({ left: delta, behavior: "smooth" });
   };
 
+  useEffect(() => {
+    if (!hasNextPage || !fetchNextPage) return;
+
+    const sentinel = sentinelRef.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { root: scrollRef.current, rootMargin: "0px", threshold: 1.0 }
+    );
+
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+    return () => {
+      if (sentinel) {
+        observer.observe(sentinel);
+      }
+    };
+  }, [hasNextPage, fetchNextPage]);
+
+  const childrenArray = React.Children.toArray(children);
+
   return (
     <ScrollWrapper>
       {!isMobile && (
@@ -65,14 +96,24 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
       )}
 
       <ScrollContent ref={scrollRef}>
-        {React.Children.map(children, (child, index) =>
-          index === 0 ? (
-            <div ref={cardRef} style={{ scrollSnapAlign: "start" }}>
-              {child}
-            </div>
-          ) : (
-            <div style={{ scrollSnapAlign: "start" }}>{child}</div>
-          )
+        {childrenArray.map((child, index) => (
+          <div
+            key={index}
+            ref={index === 0 ? cardRef : undefined}
+            style={{ scrollSnapAlign: "start" }}
+          >
+            {child}
+          </div>
+        ))}
+        {hasNextPage && (
+          <div
+            ref={sentinelRef}
+            style={{
+              width: 1,
+              height: 1,
+              scrollSnapAlign: "start",
+            }}
+          />
         )}
       </ScrollContent>
 
