@@ -11,8 +11,8 @@ const AppRoutes: React.FC = () => (
     <Route path="/" element={<AppLayout />}>
       <Route index element={<HomePage />} />
       <Route path="favourites" element={<FavouritesPage />} />
-      <Route path="movie" element={<MoviePage />} />
-      <Route path="*" element={<PageNotFound />}></Route>
+      <Route path="movie/:movieId" element={<MoviePage />} />
+      <Route path="*" element={<PageNotFound />} />
     </Route>
   </Routes>
 );

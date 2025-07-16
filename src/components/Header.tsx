@@ -1,33 +1,35 @@
-import { AppBar, Box, IconButton, InputBase, Toolbar } from "@mui/material";
-import { FavoriteBorder, Search as SearchIcon } from "@mui/icons-material";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { FavoriteBorder } from "@mui/icons-material";
 import { NavLink } from "react-router";
+import SearchInput from "./SearchInput";
+import theme from "../styles/theme";
 
 const Header: React.FC = () => {
   return (
     <AppBar>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: theme.palette.background.default,
+        }}
+      >
         <NavLink
           to="/"
           title="Home"
           style={{ textDecoration: "none", color: "inherit" }}
         >
-          🎬
+          <Typography
+            component="span"
+            sx={{ minWidth: 44, height: 44, fontSize: 32 }}
+          >
+            🎬
+          </Typography>
         </NavLink>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            bgcolor: "grey.700",
-            borderRadius: 1,
-            px: 1,
-          }}
-        >
-          <SearchIcon sx={{ mr: 1, color: "grey.500" }}></SearchIcon>
-          <InputBase placeholder="Search movies..."></InputBase>
-        </Box>
+        <SearchInput />
         <NavLink to="/favourites" title="Favourites">
-          <IconButton>
+          <IconButton sx={{ minWidth: 44, height: 44 }}>
             <FavoriteBorder />
           </IconButton>
         </NavLink>

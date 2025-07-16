@@ -49,16 +49,17 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1f1f1f",
+          backgroundColor: "#121212",
           boxShadow: "none",
+          overlay: "none",
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
-          padding: "6px 16px",
+          borderRadius: 10,
+          padding: "6px 12px",
         },
         containedPrimary: {
           color: "#fff",
@@ -71,7 +72,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#1e1e1e",
-          borderRadius: 12,
+          borderRadius: 8,
           boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
         },
       },
