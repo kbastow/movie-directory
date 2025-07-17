@@ -7,8 +7,10 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface MovieCardProps {
+  id: number;
   title: string;
   poster: string;
   release_date: string;
@@ -16,6 +18,7 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
+  id,
   title,
   poster,
   release_date,
@@ -25,11 +28,11 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <CardActionArea>
+    <CardActionArea component={Link} to={`/movie/${id}`}>
       <Card
         sx={{
           display: isMobile ? "flex" : "block",
-          width: isMobile ? "100%" : 150,
+          width: isMobile ? "100%" : 160,
           height: isMobile ? 90 : "auto",
         }}
       >
@@ -61,7 +64,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
             {release_date.slice(0, 4)}
           </Typography>
           <Typography variant="caption" noWrap={!isMobile}>
-            Rating: {Math.round(vote_average)} / 10
+            {Math.round(vote_average)} / 10
           </Typography>
         </CardContent>
       </Card>

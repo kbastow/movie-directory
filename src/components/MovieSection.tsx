@@ -15,6 +15,7 @@ import MovieCard from "./MovieCard";
 import MobilePaginationControls from "./MobilePaginationControls";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchMoviesByType } from "../api/movies";
+import { getImageUrl } from "../utils/getImageUrl";
 
 type MovieSectionProps = {
   title: string;
@@ -87,12 +88,9 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
             {mobileResults.map((movie: Movie) => (
               <MovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
-                poster={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w154${movie.poster_path}`
-                    : "https://placehold.co/154x400?text=No+image"
-                }
+                poster={getImageUrl(movie.poster_path, "w500")}
                 release_date={movie.release_date}
                 vote_average={movie.vote_average}
               />
@@ -120,12 +118,9 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
             group.results.map((movie: Movie) => (
               <MovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
-                poster={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w154${movie.poster_path}`
-                    : "https://placehold.co/154x400?text=No+image"
-                }
+                poster={getImageUrl(movie.poster_path, "w500")}
                 release_date={movie.release_date}
                 vote_average={movie.vote_average}
               />
