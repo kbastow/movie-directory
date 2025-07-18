@@ -6,13 +6,14 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type HorizontalScrollerProps = {
   children: React.ReactNode;
   hasNextPage?: boolean;
   fetchNextPage?: () => void;
   isFetchingNextPage?: boolean;
+  showArrowsOnMobile?: boolean;
 };
 
 const ScrollWrapper = styled(Box)(({ theme }) => ({
@@ -45,12 +46,16 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
   children,
   hasNextPage,
   fetchNextPage,
+  showArrowsOnMobile = false,
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const shouldShowArrows = !isMobile || (isMobile && showArrowsOnMobile);
+  const [atStart, setAtStart] = useState(false);
+  const [atEnd, setAtEnd] = useState(false);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current || !cardRef.current) return;
@@ -62,10 +67,24 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
   };
 
   useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+      setAtStart(scrollLeft <= 0);
+      setAtEnd(scrollLeft + clientWidth >= scrollWidth - 1);
+    };
+
+    handleScroll();
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     if (!hasNextPage || !fetchNextPage) return;
-
     const sentinel = sentinelRef.current;
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -74,7 +93,6 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
       },
       { root: scrollRef.current, rootMargin: "0px", threshold: 1.0 }
     );
-
     if (sentinel) {
       observer.observe(sentinel);
     }
@@ -89,8 +107,12 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
 
   return (
     <ScrollWrapper>
-      {!isMobile && (
-        <ArrowButton onClick={() => scroll("left")} sx={{ left: 0 }}>
+      {shouldShowArrows && (
+        <ArrowButton
+          onClick={() => scroll("left")}
+          sx={{ left: -20 }}
+          disabled={atStart}
+        >
           <ArrowBackIos />
         </ArrowButton>
       )}
@@ -117,8 +139,12 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         )}
       </ScrollContent>
 
-      {!isMobile && (
-        <ArrowButton onClick={() => scroll("right")} sx={{ right: 0 }}>
+      {shouldShowArrows && (
+        <ArrowButton
+          onClick={() => scroll("right")}
+          sx={{ right: -20 }}
+          disabled={atEnd}
+        >
           <ArrowForwardIos />
         </ArrowButton>
       )}

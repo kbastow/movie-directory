@@ -11,7 +11,6 @@ import {
 import { useMovieDetails } from "../hooks/useMovieDetails";
 import { getImageUrl } from "../utils/getImageUrl";
 import HorizontalScroller from "../components/HorizontalScroller";
-import MovieCard from "../components/MovieCard";
 
 const MoviePage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
@@ -95,10 +94,10 @@ const MoviePage: React.FC = () => {
                       mx: "auto",
                     }}
                   />
-                  <Typography variant="body2" noWrap>
+                  <Typography variant="subtitle2">
                     {member.character}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" noWrap>
+                  <Typography variant="caption" color="text.secondary">
                     {member.name}
                   </Typography>
                 </Box>
@@ -109,18 +108,39 @@ const MoviePage: React.FC = () => {
       </Stack>
 
       {/* Similar Movies */}
-      <Box>
-        <Typography variant="h6">You might also like</Typography>
-        <HorizontalScroller>
-          {movie.similar.map((sim) => (
-            <MovieCard
+      <Box sx={{ mt: 6 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          You might also like
+        </Typography>
+        <HorizontalScroller showArrowsOnMobile>
+          {movie.similar.slice(0, 8).map((sim) => (
+            <Box
               key={sim.id}
-              id={movie.id}
-              title={sim.title}
-              poster={getImageUrl(sim.poster_path, "w154")}
-              release_date={sim.release_date}
-              vote_average={sim.vote_average}
-            />
+              sx={{
+                width: 100,
+                flex: "0 0 auto",
+              }}
+            >
+              <Box
+                component="img"
+                src={getImageUrl(sim.poster_path, "w154")}
+                alt={sim.title}
+                sx={{
+                  width: "100%",
+                  borderRadius: 2,
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  transition: "transform 0.2s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  window.location.href = `/movie/${sim.id}`;
+                }}
+              />
+            </Box>
           ))}
         </HorizontalScroller>
       </Box>

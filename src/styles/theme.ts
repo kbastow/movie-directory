@@ -25,12 +25,11 @@ const theme = createTheme({
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontSize: "3rem",
+      fontSize: "2.5rem",
       fontWeight: 700,
-      letterSpacing: "-1px",
     },
     h2: {
-      fontSize: "2.25rem",
+      fontSize: "2rem",
       fontWeight: 600,
     },
     h5: {
