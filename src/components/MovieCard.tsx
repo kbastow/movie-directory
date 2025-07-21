@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardMedia,
   CardContent,
@@ -9,26 +10,26 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
+import type { Movie } from "../types/movies";
+import { getImageUrl } from "../utils/getImageUrl";
+
 interface MovieCardProps {
-  id: number;
-  title: string;
-  poster: string;
-  release_date: string;
-  vote_average: number;
+  movie: Movie;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({
-  id,
-  title,
-  poster,
-  release_date,
-  vote_average,
-}) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+  const { id, title, poster_path, release_date, vote_average } = movie;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <CardActionArea component={Link} to={`/movie/${id}`}>
+    <CardActionArea
+      component={Link}
+      to={`/movie/${id}`}
+      onClick={() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
+    >
       <Card
         sx={{
           display: isMobile ? "flex" : "block",
@@ -36,17 +37,19 @@ const MovieCard: React.FC<MovieCardProps> = ({
           height: isMobile ? 90 : "auto",
         }}
       >
-        <CardMedia
-          component="img"
-          image={poster}
-          alt={title}
-          sx={{
-            width: isMobile ? 60 : "100%",
-            height: isMobile ? "100%" : 240,
-            objectFit: "cover",
-            p: isMobile ? 1 : 0,
-          }}
-        />
+        <Box>
+          <CardMedia
+            component="img"
+            image={getImageUrl(poster_path, "w500")}
+            alt={title}
+            sx={{
+              width: isMobile ? 60 : "100%",
+              height: isMobile ? "100%" : 240,
+              objectFit: "cover",
+              p: isMobile ? 1 : 0,
+            }}
+          />
+        </Box>
         <CardContent
           sx={{
             display: "flex",

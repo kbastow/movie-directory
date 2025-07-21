@@ -7,10 +7,13 @@ import {
   CircularProgress,
   useMediaQuery,
   useTheme,
+  IconButton,
 } from "@mui/material";
 import { useMovieDetails } from "../hooks/useMovieDetails";
 import { getImageUrl } from "../utils/getImageUrl";
 import HorizontalScroller from "../components/HorizontalScroller";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import { useFavourites } from "../hooks/useFavourites";
 
 const MoviePage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
@@ -18,6 +21,7 @@ const MoviePage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
+  const { isFavourite, toggleFavourite } = useFavourites(movie);
 
   if (isLoading) return <CircularProgress />;
   if (isError || !movie)
@@ -37,25 +41,39 @@ const MoviePage: React.FC = () => {
         alignItems="flex-start"
         sx={{ mb: 6 }}
       >
-        <Box
-          component="img"
-          src={getImageUrl(movie.poster_path, "w500")}
-          alt={movie.title}
-          sx={{
-            width: isMobile ? "100%" : 300,
-            maxWidth: isMobile ? 300 : "auto",
-            borderRadius: 2,
-            objectFit: "cover",
-          }}
-        />
+        <Box sx={{ position: "relative" }}>
+          <Box
+            component="img"
+            src={getImageUrl(movie.poster_path, "w500")}
+            alt={movie.title}
+            sx={{
+              width: isMobile ? "100%" : 300,
+              maxWidth: isMobile ? 300 : "auto",
+              borderRadius: 2,
+              objectFit: "cover",
+            }}
+          />
+          <IconButton
+            onClick={toggleFavourite}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+            }}
+            aria-label="add to favourites"
+          >
+            {isFavourite ? <Favorite /> : <FavoriteBorder />}
+          </IconButton>
+        </Box>
         <Box>
-          <Typography variant="h4" component="h1">
+          <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
             {movie.title}
           </Typography>
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
             {movie.release_date.slice(0, 4)} · {movie.runtime} mins |{" "}
             {movie.vote_average.toFixed(1)} ⭐
           </Typography>
+
           <Typography variant="body1" sx={{ mb: 2 }}>
             {movie.overview}
           </Typography>
@@ -113,7 +131,7 @@ const MoviePage: React.FC = () => {
           You might also like
         </Typography>
         <HorizontalScroller showArrowsOnMobile>
-          {movie.similar.slice(0, 8).map((sim) => (
+          {movie.similar.slice(0, 12).map((sim) => (
             <Box
               key={sim.id}
               sx={{

@@ -15,7 +15,6 @@ import MovieCard from "./MovieCard";
 import MobilePaginationControls from "./MobilePaginationControls";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchMoviesByType } from "../api/movies";
-import { getImageUrl } from "../utils/getImageUrl";
 
 type MovieSectionProps = {
   title: string;
@@ -86,14 +85,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
         <>
           <Stack spacing={2} sx={{ py: 2 }}>
             {mobileResults.map((movie: Movie) => (
-              <MovieCard
-                key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster={getImageUrl(movie.poster_path, "w500")}
-                release_date={movie.release_date}
-                vote_average={movie.vote_average}
-              />
+              <MovieCard key={movie.id} movie={movie} />
             ))}
           </Stack>
           {mobileData && (
@@ -116,14 +108,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
         >
           {infiniteData?.pages.flatMap((group) =>
             group.results.map((movie: Movie) => (
-              <MovieCard
-                key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster={getImageUrl(movie.poster_path, "w500")}
-                release_date={movie.release_date}
-                vote_average={movie.vote_average}
-              />
+              <MovieCard key={movie.id} movie={movie} />
             ))
           )}
         </HorizontalScroller>
