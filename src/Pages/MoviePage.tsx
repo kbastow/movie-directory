@@ -155,7 +155,7 @@ const MoviePage: React.FC = () => {
                 }}
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
-                  window.location.href = `/movie/${sim.id}`;
+                  window.location.href = `/movie-directory/movie/${sim.id}`;
                 }}
               />
             </Box>

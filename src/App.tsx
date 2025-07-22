@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 
 const App: React.FC = () => (
   <>
-    <BrowserRouter>
+    <BrowserRouter basename="/movie-directory">
       <QueryClientProvider client={queryClient}>
         <AppRoutes />
         <ReactQueryDevtools />
