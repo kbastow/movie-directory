@@ -1,5 +1,6 @@
 # Node modules
 node_modules/
+node_modules/.cache/gh-pages
 
 # Build output
 dist/
