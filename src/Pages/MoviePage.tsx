@@ -14,11 +14,13 @@ import { getImageUrl } from "../utils/getImageUrl";
 import HorizontalScroller from "../components/HorizontalScroller";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useFavourites } from "../hooks/useFavourites";
+import { useNavigate } from "react-router-dom";
 
 const MoviePage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
 
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
   const { isFavourite, toggleFavourite } = useFavourites(movie);
@@ -155,7 +157,7 @@ const MoviePage: React.FC = () => {
                 }}
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
-                  window.location.href = `/movie-directory/movie/${sim.id}`;
+                  navigate(`/movie/${sim.id}`);
                 }}
               />
             </Box>
