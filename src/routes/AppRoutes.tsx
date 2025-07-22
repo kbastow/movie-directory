@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import HomePage from "../page/HomePage";
-import FavouritesPage from "../page/FavouritesPage";
-import MoviePage from "../page/MoviePage";
+import HomePage from "../pages/HomePage";
+import FavouritesPage from "../pages/FavouritesPage";
+import MoviePage from "../pages/MoviePage";
 import AppLayout from "../layout/AppLayout";
-import PageNotFound from "../page/PageNotFound";
+import PageNotFound from "../pages/PageNotFound";
 
 const AppRoutes: React.FC = () => (
   <Routes>

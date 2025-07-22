@@ -14,13 +14,12 @@ import { getImageUrl } from "../utils/getImageUrl";
 import HorizontalScroller from "../components/HorizontalScroller";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useFavourites } from "../hooks/useFavourites";
-import { useNavigate } from "react-router-dom";
+import MoviePoster from "../components/MoviePoster";
 
 const MoviePage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const navigate = useNavigate();
 
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
   const { isFavourite, toggleFavourite } = useFavourites(movie);
@@ -134,33 +133,12 @@ const MoviePage: React.FC = () => {
         </Typography>
         <HorizontalScroller showArrowsOnMobile>
           {movie.similar.slice(0, 12).map((sim) => (
-            <Box
+            <MoviePoster
               key={sim.id}
-              sx={{
-                width: 100,
-                flex: "0 0 auto",
-              }}
-            >
-              <Box
-                component="img"
-                src={getImageUrl(sim.poster_path, "w154")}
-                alt={sim.title}
-                sx={{
-                  width: "100%",
-                  borderRadius: 2,
-                  objectFit: "cover",
-                  cursor: "pointer",
-                  transition: "transform 0.2s ease-in-out",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  navigate(`/movie/${sim.id}`);
-                }}
-              />
-            </Box>
+              id={sim.id}
+              title={sim.title}
+              poster_path={sim.poster_path}
+            />
           ))}
         </HorizontalScroller>
       </Box>

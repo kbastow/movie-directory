@@ -72,8 +72,8 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
 
     const handleScroll = () => {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
-      setAtStart(scrollLeft <= 0);
-      setAtEnd(scrollLeft + clientWidth >= scrollWidth - 1);
+      setAtStart(scrollLeft <= 50);
+      setAtEnd(scrollLeft + clientWidth >= scrollWidth - 5);
     };
 
     handleScroll();
@@ -110,7 +110,12 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
       {shouldShowArrows && (
         <ArrowButton
           onClick={() => scroll("left")}
-          sx={{ left: -20 }}
+          sx={{
+            position: "absolute",
+            left: -12,
+            zIndex: 1,
+            backgroundColor: theme.palette.primary.main,
+          }}
           disabled={atStart}
         >
           <ArrowBackIos />
@@ -142,7 +147,12 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
       {shouldShowArrows && (
         <ArrowButton
           onClick={() => scroll("right")}
-          sx={{ right: -20 }}
+          sx={{
+            position: "absolute",
+            right: 0,
+            zIndex: 1,
+            backgroundColor: theme.palette.primary.main,
+          }}
           disabled={atEnd}
         >
           <ArrowForwardIos />
