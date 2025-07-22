@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: "/movie-directory/",
+export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/movie-directory/" : "/",
   plugins: [react()],
-});
+}));

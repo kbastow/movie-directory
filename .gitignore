@@ -8,6 +8,9 @@ build/
 # Vite cache
 .vite/
 
+# gh-pages cache
+.cache/
+
 # Local env files
 .env*
 !.env.example
