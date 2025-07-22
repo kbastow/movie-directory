@@ -40,9 +40,9 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
         src={getImageUrl(poster_path, "w342")}
         alt={title}
         sx={{
-          width: "100%",
-
-          borderRadius: 2,
+          width: 100,
+          height: "100%",
+          borderRadius: 1,
           objectFit: "cover",
           cursor: "pointer",
           transition: "transform 0.2s ease-in-out",
