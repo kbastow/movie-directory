@@ -22,7 +22,6 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
     if (onClick) {
       onClick();
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
       navigate(`/movie/${id}`);
     }
   };

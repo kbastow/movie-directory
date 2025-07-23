@@ -23,13 +23,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <CardActionArea
-      component={Link}
-      to={`/movie/${id}`}
-      onClick={() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }}
-    >
+    <CardActionArea component={Link} to={`/movie/${id}`}>
       <Card
         sx={{
           display: isMobile ? "flex" : "block",
