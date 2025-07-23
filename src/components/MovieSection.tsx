@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Stack,
-  useTheme,
-  useMediaQuery,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Typography, Stack, useTheme, useMediaQuery } from "@mui/material";
 import { useMovies } from "../hooks/useMovies";
 import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
 import { type Movie, type MovieApiResponse } from "../types/movies";
@@ -50,7 +43,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
   }, [page, isMobile, mobileData, queryClient, type]);
 
   const movies: Movie[] = isMobile
-    ? (data as MovieApiResponse)?.results.slice(
+    ? mobileData?.results.slice(
         (slicePage - 1) * itemsPerPage,
         slicePage * itemsPerPage
       ) ?? []
@@ -68,11 +61,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
   } = useInfiniteMovies(type);
 
   if ((isMobile && isMobileLoading) || (!isMobile && isDesktopLoading)) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <Typography>Loading {title.toLowerCase()}</Typography>;
   }
 
   if ((isMobile && isMobileError) || (!isMobile && isDesktopError)) {
@@ -102,8 +91,8 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
               slicePage={slicePage}
               setSlicePage={setSlicePage}
               itemsPerPage={itemsPerPage}
-              resultsLength={(data as MovieApiResponse).results.length}
-              totalPages={(data as MovieApiResponse).total_pages}
+              resultsLength={mobileData.results.length}
+              totalPages={mobileData.total_pages}
             />
           )}
         </>
