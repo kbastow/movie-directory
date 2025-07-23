@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useDebounce } from "use-debounce";
 import { useSearchMovies } from "../hooks/useSearchMovies";
 import { useNavigate } from "react-router";
+import theme from "../styles/theme";
 
 type Movie = {
   id: number;
@@ -101,11 +102,14 @@ const SearchInput: React.FC = () => {
           <Paper
             sx={{
               position: "absolute",
-              top: "100%",
-              width: "100%",
+              margin: "auto",
+              top: "85%",
+              width: "96%",
+              maxWidth: 800,
               maxHeight: 300,
               overflowY: "auto",
               zIndex: 2,
+              backgroundColor: theme.palette.grey[800],
             }}
           >
             <List dense>

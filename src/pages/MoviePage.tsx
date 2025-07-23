@@ -21,7 +21,19 @@ const MoviePage: React.FC = () => {
 
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          height: "80vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   if (isError || !movie)
     return <Typography color="error">Movie not found</Typography>;
 
@@ -44,7 +56,7 @@ const MoviePage: React.FC = () => {
           src={getImageUrl(movie.poster_path, "w500")}
           alt={movie.title}
           sx={{
-            width: isMobile ? "100%" : 300,
+            width: isMobile ? 280 : 300,
             height: "100%",
             borderRadius: 2,
             objectFit: "cover",

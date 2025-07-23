@@ -1,5 +1,5 @@
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
-import { FavoriteBorder } from "@mui/icons-material";
+import { Favorite } from "@mui/icons-material";
 import { NavLink } from "react-router";
 import SearchInput from "./SearchInput";
 import theme from "../styles/theme";
@@ -29,8 +29,19 @@ const Header: React.FC = () => {
 
         <SearchInput />
         <NavLink to="/favourites" title="Favourites">
-          <IconButton sx={{ minWidth: 44, height: 44 }}>
-            <FavoriteBorder />
+          <IconButton
+            sx={{
+              width: "44px",
+              height: "44px",
+              backgroundColor: "#80808075",
+              transition: "transform 0.2s ease-in-out",
+              "&:hover": {
+                backgroundColor: "#808080",
+              },
+            }}
+            aria-label="Favourites"
+          >
+            <Favorite color="error" />
           </IconButton>
         </NavLink>
       </Toolbar>
