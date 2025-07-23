@@ -9,19 +9,20 @@ import {
 } from "@mui/material";
 import { useMovies } from "../hooks/useMovies";
 import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
-import { type Movie } from "../types/movies";
+import { type Movie, type MovieApiResponse } from "../types/movies";
 import HorizontalScroller from "./HorizontalScroller";
 import MovieCard from "./MovieCard";
 import MobilePaginationControls from "./MobilePaginationControls";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
 import { fetchMoviesByType } from "../api/movies";
 
 type MovieSectionProps = {
   title: string;
   type: "trending" | "top_rated" | "now_playing";
+  data: MovieApiResponse | InfiniteData<MovieApiResponse> | undefined;
 };
 
-const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
+const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -48,24 +49,30 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
     }
   }, [page, isMobile, mobileData, queryClient, type]);
 
-  const mobileResults =
-    mobileData?.results.slice(
-      (slicePage - 1) * itemsPerPage,
-      slicePage * itemsPerPage
-    ) || [];
+  const movies: Movie[] = isMobile
+    ? (data as MovieApiResponse)?.results.slice(
+        (slicePage - 1) * itemsPerPage,
+        slicePage * itemsPerPage
+      ) ?? []
+    : (data as InfiniteData<MovieApiResponse>)?.pages.flatMap(
+        (page) => page.results
+      ) ?? [];
 
   // Desktop infinite scroll
   const {
-    data: infiniteData,
-    isLoading: isDesktopLoading,
-    isError: isDesktopError,
     fetchNextPage,
     hasNextPage,
+    isLoading: isDesktopLoading,
     isFetchingNextPage,
+    isError: isDesktopError,
   } = useInfiniteMovies(type);
 
   if ((isMobile && isMobileLoading) || (!isMobile && isDesktopLoading)) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if ((isMobile && isMobileError) || (!isMobile && isDesktopError)) {
@@ -84,19 +91,19 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
       {isMobile ? (
         <>
           <Stack spacing={2} sx={{ py: 2 }}>
-            {mobileResults.map((movie: Movie) => (
+            {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </Stack>
-          {mobileData && (
+          {data && (
             <MobilePaginationControls
               page={page}
               setPage={setPage}
               slicePage={slicePage}
               setSlicePage={setSlicePage}
               itemsPerPage={itemsPerPage}
-              resultsLength={mobileData.results.length}
-              totalPages={mobileData.total_pages}
+              resultsLength={(data as MovieApiResponse).results.length}
+              totalPages={(data as MovieApiResponse).total_pages}
             />
           )}
         </>
@@ -106,11 +113,9 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type }) => {
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
         >
-          {infiniteData?.pages.flatMap((group) =>
-            group.results.map((movie: Movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))
-          )}
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
         </HorizontalScroller>
       )}
     </Box>

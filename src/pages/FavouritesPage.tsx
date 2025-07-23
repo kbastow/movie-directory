@@ -20,7 +20,7 @@ const FavouritesPage = () => {
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Your Favourites
+        Favourites
       </Typography>
 
       {favourites.length === 0 ? (

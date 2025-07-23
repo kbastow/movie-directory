@@ -15,3 +15,8 @@ export interface MovieApiResponse {
   total_pages: number;
   total_results: number;
 }
+
+export interface InfiniteMovieApiResponse {
+  pages: MovieApiResponse[];
+  pageParams: number[];
+}
