@@ -5,8 +5,9 @@
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
     <script>
-        localStorage.setItem("redirectPath", location.pathname);
-        window.location.replace("/movie-directory/");
+        const path = location.pathname.replace(/^\/movie-directory/, "");
+        localStorage.setItem("redirectPath", path);
+
     </script>
 </head>
 
