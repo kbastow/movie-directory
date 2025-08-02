@@ -109,7 +109,7 @@ const SearchInput: React.FC = () => {
               maxHeight: 300,
               overflowY: "auto",
               zIndex: 2,
-              backgroundColor: theme.palette.grey[800],
+              backgroundColor: theme.palette.background.paper,
             }}
           >
             <List dense>

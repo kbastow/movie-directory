@@ -5,6 +5,7 @@ import {
   styled,
   IconButton,
   useMediaQuery,
+  alpha,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -16,16 +17,15 @@ type HorizontalScrollerProps = {
   showArrowsOnMobile?: boolean;
 };
 
-const ScrollWrapper = styled(Box)(({ theme }) => ({
+const ScrollWrapper = styled(Box)(() => ({
   position: "relative",
-  padding: theme.spacing(2),
 }));
 
 const ScrollContent = styled(Box)(({ theme }) => ({
   display: "flex",
   overflowX: "auto",
   gap: theme.spacing(2),
-  padding: `${theme.spacing(4)} ${theme.spacing(2)}`,
+  padding: `${theme.spacing(1)}`,
   scrollSnapType: "x mandatory",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
@@ -36,10 +36,10 @@ const ArrowButton = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   transform: "translateY(-50%)",
-  zIndex: 1,
-  backgroundColor: theme.palette.background.paper,
+  zIndex: 9,
+  backgroundColor: alpha(theme.palette.primary.main, 0.7),
   boxShadow: theme.shadows[2],
-  "&:hover": { backgroundColor: theme.palette.grey[200] },
+  "&:hover": { backgroundColor: alpha(theme.palette.background.paper, 0.7) },
 }));
 
 const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
@@ -61,7 +61,9 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     if (!scrollRef.current || !cardRef.current) return;
     const cardWidth = cardRef.current.offsetWidth;
     const gapPx = parseInt(theme.spacing(2).replace("px", ""), 10);
-    const amount = cardWidth + gapPx;
+    const containerWidth = scrollRef.current.clientWidth;
+    const cardsVisible = Math.floor(containerWidth / (cardWidth + gapPx));
+    const amount = (cardWidth + gapPx) * (cardsVisible || 1);
     const delta = direction === "left" ? -amount : amount;
     scrollRef.current.scrollBy({ left: delta, behavior: "smooth" });
   };
@@ -111,12 +113,10 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         <ArrowButton
           onClick={() => scroll("left")}
           sx={{
-            position: "absolute",
-            left: -12,
-            zIndex: 1,
-            backgroundColor: theme.palette.primary.main,
+            left: -15,
           }}
           disabled={atStart}
+          disableRipple
         >
           <ArrowBackIos />
         </ArrowButton>
@@ -148,12 +148,10 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         <ArrowButton
           onClick={() => scroll("right")}
           sx={{
-            position: "absolute",
-            right: 0,
-            zIndex: 1,
-            backgroundColor: theme.palette.primary.main,
+            right: -15,
           }}
           disabled={atEnd}
+          disableRipple
         >
           <ArrowForwardIos />
         </ArrowButton>
