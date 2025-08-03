@@ -37,9 +37,9 @@ const ArrowButton = styled(IconButton)(({ theme }) => ({
   top: "50%",
   transform: "translateY(-50%)",
   zIndex: 9,
-  backgroundColor: alpha(theme.palette.primary.main, 0.7),
+  backgroundColor: alpha(theme.palette.primary.main, 0.85),
   boxShadow: theme.shadows[2],
-  "&:hover": { backgroundColor: alpha(theme.palette.background.paper, 0.7) },
+  "&:hover": { backgroundColor: alpha(theme.palette.background.paper, 0.85) },
 }));
 
 const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({

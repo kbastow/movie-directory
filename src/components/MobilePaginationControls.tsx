@@ -47,7 +47,7 @@ const MobilePaginationControls: React.FC<MobilePaginationControlsProps> = ({
   return (
     <Stack
       direction="row"
-      justifyContent="space-around"
+      justifyContent="space-between"
       alignItems="center"
       sx={{ py: 2 }}
     >
@@ -55,10 +55,16 @@ const MobilePaginationControls: React.FC<MobilePaginationControlsProps> = ({
         variant="contained"
         onClick={handlePrevious}
         disabled={disablePrevious}
+        disableRipple
       >
-        Previous
+        Prev
       </Button>
-      <Button variant="contained" onClick={handleNext} disabled={disableNext}>
+      <Button
+        variant="contained"
+        onClick={handleNext}
+        disabled={disableNext}
+        disableRipple
+      >
         Next
       </Button>
     </Stack>

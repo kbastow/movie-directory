@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Stack, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useMovies } from "../hooks/useMovies";
 import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
 import { type Movie, type MovieApiResponse } from "../types/movies";
@@ -22,7 +23,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
   // Mobile pagination
   const [page, setPage] = useState(1);
   const [slicePage, setSlicePage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
 
   const {
     data: mobileData,
@@ -79,11 +80,13 @@ const MovieSection: React.FC<MovieSectionProps> = ({ title, type, data }) => {
       </Typography>
       {isMobile ? (
         <>
-          <Stack spacing={2} sx={{ py: 2 }}>
+          <Grid container spacing={2}>
             {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+              <Grid size={4} key={movie.id}>
+                <MovieCard movie={movie} />
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
           {data && (
             <MobilePaginationControls
               page={page}
