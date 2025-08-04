@@ -10,16 +10,17 @@ import {
   ListItemButton,
   ClickAwayListener,
   IconButton,
+  styled,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDebounce } from "use-debounce";
 import { useSearchMovies } from "../hooks/useSearchMovies";
 import { useNavigate } from "react-router";
-import theme from "../styles/theme";
 
 type Movie = {
   id: number;
   title: string;
+  poster_path: string | null;
 };
 
 type SearchValue = {
@@ -62,19 +63,26 @@ const SearchInput: React.FC = () => {
     setShowDropdown(debouncedQuery.length > 0);
   }, [debouncedQuery]);
 
+  const StyledSearchDropdown = styled(Paper)(({ theme }) => ({
+    position: "absolute",
+    margin: "auto",
+    top: "85%",
+    width: "96%",
+    maxWidth: 800,
+    maxHeight: 300,
+    overflowY: "auto",
+    zIndex: 2,
+    backgroundColor: theme.palette.background.paper,
+  }));
+
   return (
-    <Box
-      sx={{ position: "relative", width: "100%", maxWidth: 800, px: 2, py: 2 }}
-    >
+    <Box sx={{ position: "relative", width: "100%", maxWidth: 800, p: 2 }}>
       <Controller
         name="query"
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <Paper
-            component="form"
-            sx={{ p: 1, display: "flex", alignItems: "center", height: 48 }}
-          >
+          <Paper component="form" sx={{ p: 1, display: "flex" }}>
             <InputBase
               {...field}
               placeholder="Search movie titles..."
@@ -99,19 +107,7 @@ const SearchInput: React.FC = () => {
       />
       {showDropdown && (
         <ClickAwayListener onClickAway={() => setShowDropdown(false)}>
-          <Paper
-            sx={{
-              position: "absolute",
-              margin: "auto",
-              top: "85%",
-              width: "96%",
-              maxWidth: 800,
-              maxHeight: 300,
-              overflowY: "auto",
-              zIndex: 2,
-              backgroundColor: theme.palette.background.paper,
-            }}
-          >
+          <StyledSearchDropdown>
             <List dense>
               {isLoading ? (
                 <ListItem>
@@ -125,13 +121,30 @@ const SearchInput: React.FC = () => {
                 data.map((movie: Movie) => (
                   <ListItem key={movie.id}>
                     <ListItemButton onClick={() => handleSelect(movie.id)}>
-                      <ListItemText primary={movie.title} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w92${movie.poster_path}`
+                              : "https://via.placeholder.com/92x138?text=No+Image"
+                          }
+                          alt={movie.title}
+                          sx={{ width: 44, height: "auto", borderRadius: 1 }}
+                        />
+                        <ListItemText primary={movie.title} />
+                      </Box>
                     </ListItemButton>
                   </ListItem>
                 ))
               ) : null}
             </List>
-          </Paper>
+          </StyledSearchDropdown>
         </ClickAwayListener>
       )}
     </Box>

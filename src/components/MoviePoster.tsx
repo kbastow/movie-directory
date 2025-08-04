@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { getImageUrl } from "../utils/getImageUrl";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +26,18 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
     }
   };
 
+  const StyledMoviePoster = styled("img")(() => ({
+    width: 100,
+    height: "100%",
+    borderRadius: 1,
+    objectFit: "cover",
+    cursor: "pointer",
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
+  }));
+
   return (
     <Box
       sx={{
@@ -34,22 +46,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
       }}
       onClick={handleClick}
     >
-      <Box
-        component="img"
-        src={getImageUrl(poster_path, "w342")}
-        alt={title}
-        sx={{
-          width: 100,
-          height: "100%",
-          borderRadius: 1,
-          objectFit: "cover",
-          cursor: "pointer",
-          transition: "transform 0.2s ease-in-out",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
-        }}
-      />
+      <StyledMoviePoster src={getImageUrl(poster_path, "w342")} alt={title} />
     </Box>
   );
 };
