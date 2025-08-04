@@ -27,7 +27,8 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
   };
 
   const StyledMoviePoster = styled("img")(() => ({
-    width: 100,
+    width: "100%",
+    minWidth: 100,
     height: "100%",
     borderRadius: 1,
     objectFit: "cover",
@@ -39,13 +40,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
   }));
 
   return (
-    <Box
-      sx={{
-        width: 100,
-        flex: "0 0 auto",
-      }}
-      onClick={handleClick}
-    >
+    <Box onClick={handleClick}>
       <StyledMoviePoster src={getImageUrl(poster_path, "w342")} alt={title} />
     </Box>
   );

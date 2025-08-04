@@ -5,6 +5,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import MoviePoster from "../components/MoviePoster";
+import { Box } from "@mui/material";
+import FavouriteToggleButton from "../components/FavouriteToggleButton";
 
 const FavouritesPage = () => {
   const [favourites, setFavourites] = useState<FavouriteMovie[]>([]);
@@ -19,22 +21,28 @@ const FavouritesPage = () => {
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Favourites
       </Typography>
 
       {favourites.length === 0 ? (
         <Typography variant="body1">No favourites saved yet.</Typography>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           {favourites.map((movie) => (
-            <Grid key={movie.id}>
-              <MoviePoster
-                key={movie.id}
-                id={movie.id}
-                title={movie.title}
-                poster_path={movie.poster_path}
-              />
+            <Grid size={4} key={movie.id}>
+              <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+                <FavouriteToggleButton
+                  movie={movie}
+                  sx={{ position: "absolute", right: 2, top: 2, zIndex: 2 }}
+                />
+                <MoviePoster
+                  key={movie.id}
+                  id={movie.id}
+                  title={movie.title}
+                  poster_path={movie.poster_path}
+                />
+              </Box>
             </Grid>
           ))}
         </Grid>

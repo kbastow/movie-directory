@@ -3,16 +3,23 @@ import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useFavourites } from "../hooks/useFavourites";
 import type { Movie } from "../types/movies";
 import type { MovieDetail } from "../types/movieDetails";
+import type { FavouriteMovie } from "../types/favouriteMovie";
 import { favouriteButtonStyles } from "../styles/buttonStyles";
 import { useState } from "react";
 
 type Props = {
-  movie: Movie | MovieDetail;
+  movie: Movie | MovieDetail | FavouriteMovie;
   sx?: object;
 };
 
 const FavouriteToggleButton = ({ movie, sx = {} }: Props) => {
-  const { isFavourite, toggleFavourite } = useFavourites(movie);
+  // Convert FavouriteMovie to Movie if needed
+  const movieForFavourites =
+    "id" in movie && ("title" in movie || "name" in movie)
+      ? (movie as Movie | MovieDetail)
+      : undefined;
+
+  const { isFavourite, toggleFavourite } = useFavourites(movieForFavourites);
   const [showMessage, setShowMessage] = useState(false);
 
   const handleAddToFavourties = () => {
