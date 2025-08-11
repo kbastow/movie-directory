@@ -1,10 +1,10 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import MovieSection from "../components/MovieSection";
 import { useMovies } from "../hooks/useMovies";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
-import { CircularProgress } from "@mui/material";
+import LoadingContainer from "../components/LoadingContainer";
 
 const HomePage: React.FC = () => {
   const theme = useTheme();
@@ -28,20 +28,8 @@ const HomePage: React.FC = () => {
       nowPlayingInfinite.isLoading ||
       topRatedInfinite.isLoading;
 
-  if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          height: "80vh",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  if (isLoading) 
+    return <LoadingContainer />
   return (
     <>
       <Typography component="h1" variant="h2" sx={{ mb: 4 }} noWrap>

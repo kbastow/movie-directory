@@ -4,15 +4,70 @@ import {
   Box,
   Typography,
   Stack,
-  CircularProgress,
   useMediaQuery,
   useTheme,
+  styled
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useMovieDetails } from "../hooks/useMovieDetails";
 import { getImageUrl } from "../utils/getImageUrl";
 import HorizontalScroller from "../components/HorizontalScroller";
 import MoviePoster from "../components/MoviePoster";
 import FavouriteToggleButton from "../components/FavouriteToggleButton";
+import LoadingContainer from "../components/LoadingContainer";
+
+const PageContainer = styled(Box)(({ theme }) => ({
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(4),
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(4),
+  [theme.breakpoints.down("md")]: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+}));
+
+const DetailsStack = styled(Stack)(({ theme }) => ({
+  marginBottom: theme.spacing(6),
+  alignItems: "flex-start",
+}));
+
+const PosterImage = styled("img")(({ theme }) => ({
+  width: 300,
+  height: "100%",
+  objectFit: "cover",
+  [theme.breakpoints.down("md")]: {
+    width: 280,
+  },
+}));
+
+const TitleRow = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  gap: theme.spacing(2),
+}));
+
+const CastSection = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+}));
+
+const CastItem = styled(Box)(() => ({
+  textAlign: "center",
+  width: "100%",
+}));
+
+const CastImage = styled("img")(({ theme }) => ({
+  width: 80,
+  height: 80,
+  borderRadius: "50%",
+  objectFit: "cover",
+  marginBottom: theme.spacing(1),
+  marginLeft: "auto",
+  marginRight: "auto",
+}));
 
 const MoviePage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
@@ -22,54 +77,30 @@ const MoviePage: React.FC = () => {
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
 
   if (isLoading)
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          height: "80vh",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingContainer />;
+
   if (isError || !movie)
     return <Typography color="error">Movie not found</Typography>;
 
   return (
-    <Box
-      sx={{
-        py: isMobile ? 3 : 4,
-        px: isMobile ? 2 : 4,
-      }}
-    >
-      {/* Movie Details */}
-      <Stack
+    <PageContainer >
+
+      <DetailsStack
         direction={isMobile ? "column" : "row"}
         spacing={4}
-        alignItems="flex-start"
-        sx={{ mb: 6 }}
       >
-        <Box
-          component="img"
+        <PosterImage          
           src={getImageUrl(movie.poster_path, "w500")}
-          alt={movie.title}
-          sx={{
-            width: isMobile ? 280 : 300,
-            height: "100%",
-            borderRadius: 2,
-            objectFit: "cover",
-          }}
+          alt={movie.title}          
         />
-
         <Box>
-          <Box sx={{ display: "flex", direction: "row", gap: 2 }}>
+          <TitleRow>
             <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
               {movie.title}
             </Typography>
             <FavouriteToggleButton movie={movie} />
-          </Box>
+          </TitleRow>
+
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
             {movie.release_date.slice(0, 4)} · {movie.runtime} mins |{" "}
             {movie.vote_average.toFixed(1)} ⭐
@@ -81,50 +112,33 @@ const MoviePage: React.FC = () => {
           <Typography variant="caption">
             {movie.genres?.map((genre) => genre.name).join(", ")}
           </Typography>
-          {/* Cast Members */}
-          <Box sx={{ my: 4 }}>
+
+          
+          <CastSection>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Cast
             </Typography>
-            <Stack
-              direction="row"
-              gap={2}
-              flexWrap="wrap"
-              justifyContent="flex-start"
-            >
+            <Grid container spacing={2}>
               {movie.cast.slice(0, 6).map((member) => (
-                <Box
-                  key={member.id}
-                  sx={{
-                    width: 100,
-                    textAlign: "center",
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src={getImageUrl(member.profile_path, "w154")}
-                    alt={member.name}
-                    sx={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      mb: 1,
-                      mx: "auto",
-                    }}
-                  />
-                  <Typography variant="subtitle2">
-                    {member.character}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {member.name}
-                  </Typography>
-                </Box>
+                <Grid size={{ md: 2, xs: 4 }} key={member.id}>
+                  <CastItem>
+                    <CastImage                      
+                      src={getImageUrl(member.profile_path, "w154")}
+                      alt={member.name}                      
+                    />
+                    <Typography variant="subtitle2">
+                      {member.character}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {member.name}
+                    </Typography>
+                  </CastItem>
+                </Grid>
               ))}
-            </Stack>
-          </Box>
+            </Grid>
+          </CastSection>
         </Box>
-      </Stack>
+      </DetailsStack>
 
       {/* Similar Movies */}
       <Box sx={{ mt: 6 }}>
@@ -142,7 +156,7 @@ const MoviePage: React.FC = () => {
           ))}
         </HorizontalScroller>
       </Box>
-    </Box>
+    </PageContainer>
   );
 };
 
