@@ -31,7 +31,7 @@ const SearchInput: React.FC = () => {
   const { control, watch, setValue } = useForm<SearchValue>();
   const query = watch("query", "");
   const [debouncedQuery] = useDebounce(query, 600);
-  const { data, isLoading } = useSearchMovies(debouncedQuery);
+  const { data, isLoading, isError, isFetching } = useSearchMovies(debouncedQuery);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -110,39 +110,45 @@ const SearchInput: React.FC = () => {
           <StyledSearchDropdown>
             <List dense>
               {isLoading ? (
-                <ListItem>
-                  <ListItemText primary="Loading..." />
-                </ListItem>
-              ) : debouncedQuery && data?.length === 0 ? (
-                <ListItem>
-                  <ListItemText primary="No results found" />
-                </ListItem>
-              ) : debouncedQuery && data ? (
-                data.map((movie: Movie) => (
-                  <ListItem key={movie.id}>
-                    <ListItemButton onClick={() => handleSelect(movie.id)}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 1,
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          src={
-                            movie.poster_path
-                              ? `https://image.tmdb.org/t/p/w92${movie.poster_path}`
-                              : "https://via.placeholder.com/92x138?text=No+Image"
-                          }
-                          alt={movie.title}
-                          sx={{ width: 44, height: "auto", borderRadius: 1 }}
-                        />
-                        <ListItemText primary={movie.title} />
-                      </Box>
-                    </ListItemButton>
-                  </ListItem>
-                ))
-              ) : null}
+    <ListItem>
+      <ListItemText primary="Loading..." />
+    </ListItem>
+  ) : isError ? (
+    <ListItem>
+      <ListItemText primary="Something went wrong. Please try again." />
+    </ListItem>
+  ) : debouncedQuery && data?.length === 0 ? (
+    <ListItem>
+      <ListItemText primary="No results found" />
+    </ListItem>
+  ) : debouncedQuery && data ? (
+    <>
+      {data.map((movie: Movie) => (
+        <ListItem key={movie.id}>
+          <ListItemButton onClick={() => handleSelect(movie.id)}>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Box
+                component="img"
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w92${movie.poster_path}`
+                    : "https://via.placeholder.com/92x138?text=No+Image"
+                }
+                alt={movie.title}
+                sx={{ width: 44, height: "auto", borderRadius: 1 }}
+              />
+              <ListItemText primary={movie.title} />
+            </Box>
+          </ListItemButton>
+        </ListItem>
+      ))}
+      {isFetching && !isLoading && (
+        <ListItem>
+          <ListItemText primary="Updating..." />
+        </ListItem>
+      )}
+    </>
+  ) : null}
             </List>
           </StyledSearchDropdown>
         </ClickAwayListener>

@@ -28,7 +28,7 @@ describe("useMovies hook", () => {
   });
 
   describe("successful fetch", () => {
-    const mockMovieData = { results: [{ id: 1, title: "Inception" }] };
+    const mockMovieData = { results: [{ id: 1, title: "Test movie" }] };
 
     beforeEach(() => {
       (fetchMoviesByType as Mock).mockResolvedValue(mockMovieData);
@@ -40,7 +40,7 @@ describe("useMovies hook", () => {
 
         await waitFor(() => {
           expect(result.current.data).toBeDefined();
-          expect(result.current.data?.results[0].title).toBe("Inception");
+          expect(result.current.data?.results[0].title).toBe("Test movie");
         });
 
         expect(fetchMoviesByType).toHaveBeenCalledWith(category, 1);
