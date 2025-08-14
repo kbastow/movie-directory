@@ -22,8 +22,8 @@ const MovieCardWrapper = styled(Box, {
   position: "relative",
   display: "flex",
   flexDirection: isMobile ? "row" : "column",
-  width: isMobile ? "100%" : 160,
-  height: isMobile ? 165 : 240,
+  width: isMobile ? 120 : 160,
+  height: isMobile ? 180 : 240,
   cursor: "pointer",
   overflow: "hidden",
 }));
@@ -64,7 +64,7 @@ const MovieCardMedia = styled(CardMedia, {
   shouldForwardProp: (prop) => prop !== "isMobile",
 })<{ isMobile: boolean }>(({ isMobile }) => ({
   width: "100%",
-  height: isMobile ? 165 : 240,
+  height: isMobile ? 180 : 240,
   objectFit: "cover",
   flexShrink: 0,
 }));

@@ -5,7 +5,7 @@ import { useMovies } from "../hooks/useMovies";
 import { fetchMoviesByType } from "../api/movies";
 
 vi.mock("../api/movies.ts", () => ({
-  fetchMoviesByType: vi.fn()
+  fetchMoviesByType: vi.fn(),
 }));
 
 const createWrapper = () => {
@@ -22,7 +22,9 @@ describe("useMovies hook", () => {
 
   it("should return loading state initially", () => {
     (fetchMoviesByType as Mock).mockReturnValue(new Promise(() => {}));
-    const { result } = renderHook(() => useMovies("trending", 1), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useMovies("trending", 1), {
+      wrapper: createWrapper(),
+    });
 
     expect(result.current.isLoading).toBe(true);
   });
@@ -36,7 +38,9 @@ describe("useMovies hook", () => {
 
     (["trending", "top_rated", "now_playing"] as const).forEach((category) => {
       it(`fetches and returns movies for category: ${category}`, async () => {
-        const { result } = renderHook(() => useMovies(category, 1), { wrapper: createWrapper() });
+        const { result } = renderHook(() => useMovies(category, 1), {
+          wrapper: createWrapper(),
+        });
 
         await waitFor(() => {
           expect(result.current.data).toBeDefined();
@@ -47,5 +51,5 @@ describe("useMovies hook", () => {
         expect(fetchMoviesByType).toHaveBeenCalledTimes(1);
       });
     });
-  });  
+  });
 });

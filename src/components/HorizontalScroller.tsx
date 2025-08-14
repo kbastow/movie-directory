@@ -100,7 +100,7 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     }
     return () => {
       if (sentinel) {
-        observer.observe(sentinel);
+        observer.unobserve(sentinel);
       }
     };
   }, [hasNextPage, fetchNextPage]);
@@ -127,7 +127,7 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
           <div
             key={index}
             ref={index === 0 ? cardRef : undefined}
-            style={{ scrollSnapAlign: "start" }}
+            style={{ scrollSnapAlign: "start", flex: "0 0 auto" }}
           >
             {child}
           </div>

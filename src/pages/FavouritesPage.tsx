@@ -41,6 +41,7 @@ const FavouritesPage = () => {
                   id={movie.id}
                   title={movie.title}
                   poster_path={movie.poster_path}
+                  fullWidth
                 />
               </Box>
             </Grid>
