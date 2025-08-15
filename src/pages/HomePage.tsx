@@ -9,48 +9,51 @@ const HomePage: React.FC = () => {
   const nowPlayingInfinite = useInfiniteMovies("now_playing");
   const topRatedInfinite = useInfiniteMovies("top_rated");
 
-  const isLoading =
-    trendingInfinite.isLoading ||
-    nowPlayingInfinite.isLoading ||
-    topRatedInfinite.isLoading;
+  const sections: {
+    title: string;
+    type: "trending" | "now_playing" | "top_rated";
+    infinite: typeof trendingInfinite;
+  }[] = [
+    {
+      title: "Trending Movies",
+      type: "trending",
+      infinite: trendingInfinite,
+    },
+    {
+      title: "Now Playing",
+      type: "now_playing",
+      infinite: nowPlayingInfinite,
+    },
+    {
+      title: "Top Rated",
+      type: "top_rated",
+      infinite: topRatedInfinite,
+    },
+  ];
+
+  const isLoading = sections.some((s) => s.infinite.isLoading);
 
   if (isLoading) return <LoadingContainer />;
+
   return (
     <>
       <Box sx={{ py: 4 }}>
         <Typography component="h1" variant="h2" noWrap>
           Movie Directory
         </Typography>
-        <MovieSection
-          title="Trending Movies"
-          type="trending"
-          data={trendingInfinite.data}
-          fetchNextPage={trendingInfinite.fetchNextPage}
-          hasNextPage={trendingInfinite.hasNextPage}
-          isFetchingNextPage={trendingInfinite.isFetchingNextPage}
-          isLoading={trendingInfinite.isLoading}
-          isError={trendingInfinite.isError}
-        />
-        <MovieSection
-          title="Now Playing"
-          type="now_playing"
-          data={nowPlayingInfinite.data}
-          fetchNextPage={nowPlayingInfinite.fetchNextPage}
-          hasNextPage={nowPlayingInfinite.hasNextPage}
-          isFetchingNextPage={nowPlayingInfinite.isFetchingNextPage}
-          isLoading={nowPlayingInfinite.isLoading}
-          isError={nowPlayingInfinite.isError}
-        />
-        <MovieSection
-          title="Top Rated"
-          type="top_rated"
-          data={topRatedInfinite.data}
-          fetchNextPage={topRatedInfinite.fetchNextPage}
-          hasNextPage={topRatedInfinite.hasNextPage}
-          isFetchingNextPage={topRatedInfinite.isFetchingNextPage}
-          isLoading={topRatedInfinite.isLoading}
-          isError={topRatedInfinite.isError}
-        />
+        {sections.map((section) => (
+          <MovieSection
+            key={section.type}
+            title={section.title}
+            type={section.type}
+            data={section.infinite.data}
+            fetchNextPage={section.infinite.fetchNextPage}
+            hasNextPage={section.infinite.hasNextPage}
+            isFetchingNextPage={section.infinite.isFetchingNextPage}
+            isLoading={section.infinite.isLoading}
+            isError={section.infinite.isError}
+          />
+        ))}
       </Box>
     </>
   );
