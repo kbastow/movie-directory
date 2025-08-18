@@ -6,7 +6,7 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
-  styled
+  styled,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useMovieDetails } from "../hooks/useMovieDetails";
@@ -17,15 +17,9 @@ import FavouriteToggleButton from "../components/FavouriteToggleButton";
 import LoadingContainer from "../components/LoadingContainer";
 
 const PageContainer = styled(Box)(({ theme }) => ({
-  paddingTop: theme.spacing(4),
-  paddingBottom: theme.spacing(4),
-  paddingLeft: theme.spacing(4),
-  paddingRight: theme.spacing(4),
+  padding: theme.spacing(4),
   [theme.breakpoints.down("md")]: {
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    padding: theme.spacing(3, 2),
   },
 }));
 
@@ -76,22 +70,17 @@ const MoviePage: React.FC = () => {
 
   const { data: movie, isLoading, isError } = useMovieDetails(Number(movieId));
 
-  if (isLoading)
-    return <LoadingContainer />;
+  if (isLoading) return <LoadingContainer />;
 
   if (isError || !movie)
     return <Typography color="error">Movie not found</Typography>;
 
   return (
-    <PageContainer >
-
-      <DetailsStack
-        direction={isMobile ? "column" : "row"}
-        spacing={4}
-      >
-        <PosterImage          
+    <PageContainer>
+      <DetailsStack direction={isMobile ? "column" : "row"} spacing={4}>
+        <PosterImage
           src={getImageUrl(movie.poster_path, "w500")}
-          alt={movie.title}          
+          alt={movie.title}
         />
         <Box>
           <TitleRow>
@@ -113,7 +102,6 @@ const MoviePage: React.FC = () => {
             {movie.genres?.map((genre) => genre.name).join(", ")}
           </Typography>
 
-          
           <CastSection>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Cast
@@ -122,9 +110,9 @@ const MoviePage: React.FC = () => {
               {movie.cast.slice(0, 6).map((member) => (
                 <Grid size={{ md: 2, xs: 4 }} key={member.id}>
                   <CastItem>
-                    <CastImage                      
+                    <CastImage
                       src={getImageUrl(member.profile_path, "w154")}
-                      alt={member.name}                      
+                      alt={member.name}
                     />
                     <Typography variant="subtitle2">
                       {member.character}

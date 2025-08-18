@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  CardMedia,
   Typography,
   CardActionArea,
   useMediaQuery,
@@ -60,7 +59,7 @@ const MovieCardContentOverlay = styled(MovieCardContent, {
   pointerEvents: visible ? "auto" : "none",
 }));
 
-const MovieCardMedia = styled(CardMedia, {
+const MovieCardMedia = styled("img", {
   shouldForwardProp: (prop) => prop !== "isMobile",
 })<{ isMobile: boolean }>(({ isMobile }) => ({
   width: "100%",
@@ -88,10 +87,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       >
         <MovieCardMedia
           isMobile={isMobile}
-          image={getImageUrl(poster_path, "w500")}
-          title={title}
+          src={getImageUrl(poster_path, "w500")}
+          alt={title}
         />
-        <MovieCardContentOverlay visible={hovered}>
+        <MovieCardContentOverlay visible={hovered} data-testid="movie-overlay">
           <Typography variant="h6">{title}</Typography>
           <Typography variant="subtitle2" noWrap={!isMobile}>
             {release_date?.slice(0, 4)}

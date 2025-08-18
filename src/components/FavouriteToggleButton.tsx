@@ -13,7 +13,6 @@ type Props = {
 };
 
 const FavouriteToggleButton = ({ movie, sx = {} }: Props) => {
-  // Convert FavouriteMovie to Movie if needed
   const movieForFavourites =
     "id" in movie && ("title" in movie || "name" in movie)
       ? (movie as Movie | MovieDetail)

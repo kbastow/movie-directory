@@ -111,6 +111,7 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     <ScrollWrapper>
       {shouldShowArrows && (
         <ArrowButton
+          aria-label="Back"
           onClick={() => scroll("left")}
           sx={{
             left: -15,
@@ -122,7 +123,7 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         </ArrowButton>
       )}
 
-      <ScrollContent ref={scrollRef}>
+      <ScrollContent ref={scrollRef} role="region" data-testid="scroller">
         {childrenArray.map((child, index) => (
           <div
             key={index}
@@ -146,6 +147,7 @@ const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
 
       {shouldShowArrows && (
         <ArrowButton
+          aria-label="Forward"
           onClick={() => scroll("right")}
           sx={{
             right: -15,

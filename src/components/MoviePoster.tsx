@@ -20,7 +20,7 @@ interface StyledMoviePosterProps {
 const StyledMoviePoster = styled("img")<StyledMoviePosterProps>(
   ({ fullWidth, isMobile }) => ({
     width: "100%",
-    maxWidth: fullWidth ? "100%" : isMobile ? 100 : 320,
+    maxWidth: fullWidth ? "100%" : isMobile ? 100 : 220,
     height: "100%",
     borderRadius: 1,
     objectFit: "cover",
